@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  postgres-db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=bitmex
+      - POSTGRES_USER=someUser
+      - POSTGRES_PASSWORD=somePassword
+
+  app:
+    container_name: bitmexApp
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target/bitmexBot-0.0.1-SNAPSHOT.jar:/opt/app/application.jar:ro
+    depends_on:
+      - postgres-db
+    working_dir: /opt/app
+    command: ["java", "-jar", "application.jar"]
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/bitmex
+      - SPRING_DATASOURCE_USERNAME=someUser
+      - SPRING_DATASOURCE_PASSWORD=somePassword
+      - SPRING_LIQUIBASE_ENABLED=true
+      - SPRING_DATA_LIQUIBASE_CHANGE_LOG=classpath:db/changelog/db.changelog-master.xml

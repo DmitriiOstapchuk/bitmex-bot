@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Initialize algorithm properties</title>
+</head>
+<body>
+<p>Please, fill the properties for Fibonacci algorithm's work:</p>
+<form th:method="GET" th:action="@{/api/initialization}"th:object="${inputParameters}">
+    <label for="baseUrl">Choose real or test platform: </label>
+    <select id="baseUrl" name="baseUrl">
+        <option th:each="baseUrl : ${T(com.dmitrii.ostapchuk.bitmexBot.model.BaseUrl).values()}"
+                th:value="${baseUrl.getUrl()}"
+                th:text="${baseUrl.name()}">
+        </option>
+    </select>
+    <br/>
+    <label for="isDemo">Demonstration mode: </label>
+        <select id="isDemo" name="isDemo" th:field="${inputParameters.isDemo}">
+            <option th:value="true">YES</option>
+            <option th:value="false">NO</option>
+        </select>
+    <br/>
+    <label for="symbol">Choose product: </label>
+    <select id="symbol" name="symbol">
+        <option th:each="symbol : ${T(com.dmitrii.ostapchuk.bitmexBot.model.Symbol).values()}"
+                th:value="${symbol.name()}"  th:text="${#strings.capitalize(symbol.name())}">
+        </option>
+    </select>
+    <br/>
+    <label for="initialQty">Enter initial quantity of one order: </label>
+    <input type="number" th:field="*{initialQty}" id="initialQty" value="100"/>
+    <br/>
+    <label for="step">Enter price step: </label>
+    <input type="number" th:field="*{step}" id="step" value="100"/>
+    <br/>
+    <label for="numberOfLevels">Enter number of Fibonacci levels(from 5 to 10): </label>
+    <input type="number" th:field="*{numberOfLevels}" id="numberOfLevels" value="6" min="5" max="10"/>
+    <br/>
+    <label for="numberOfCycles">Choose number of algorithm cycles: </label>
+    <select id="numberOfCycles" name="numberOfCycles" th:value="${numberOfCycles}">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="2147483647">Unlimited</option>
+    </select>
+    <br/>
+    <input type="submit" value="Create"/>
+</form>
+</body>
+</html>
